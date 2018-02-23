@@ -8,16 +8,15 @@ body{
 }
 .headClass{
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 50px;
+    font-size: 40px;
     color:#00356b;
     text-align: center;
-    height:70px;
+    height:40px;
 }
 .pClass{
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size:25px;
-     
-}
+    font-size:20px;
+ }
 #grid{
     display: flex;
     flex-direction: row;
@@ -36,6 +35,18 @@ body{
     
 }
 
-.imgClass{
-    
+.disableDiv{
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.noDisplay{
+    display: none;
+}
+
+.yesDisplay{
+    display: block;
+}
+.msgDiv{
+    float: left;
 }
