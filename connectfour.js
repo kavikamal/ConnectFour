@@ -86,8 +86,7 @@ function checkWinner(colRow){
     var win=4,  r=0, c=0, dr=0, dl=0;
     var color=0; 
     colRow.charAt(0)==='b' ? color=1:color=2;
-
-    for(var i=0;i<7;i++){
+    for(var i=0;i<6;i++){
         for(var j=0;j<7;j++){
             (dots[j][i]===color) ? c++ : c=0;
             (dots[i][j]===color) ? r++ : r=0;
@@ -103,7 +102,7 @@ function checkWinner(colRow){
                 startGameBtn.setAttribute("class","yesDisplay");
                 return true;
     }
-        } r=0;
+    } r=0;
     }
     return false;
 }
