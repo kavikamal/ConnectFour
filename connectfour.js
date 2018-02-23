@@ -30,39 +30,79 @@ function createBall(columnGrid){
     var dotElement=document.createElement("img");
     dotElement.setAttribute("class","imgClass");
     console.log(currentPlayer);
+    var colRow=target.slice(-1).concat(columnGrid.childElementCount);
     if (currentPlayer=="b"){
         dotElement.setAttribute("src","black.png");
-        dotElement.setAttribute("id",target.slice(-1).concat(columnGrid.childElementCount)+"b");
+        colRow= "i"+colRow;
+        dotElement.setAttribute("alt","b");
+        dotElement.setAttribute("id",colRow);
         columnGrid.appendChild(dotElement);
-        if (checkWinner()){
+        if (checkWinner(colRow)){
             document.getElementById('p4').textContent="Player 1 is the winner";
         }
         currentPlayer="r";
         document.getElementById('curPlay').textContent="Player 2's turn";
     }else {
         dotElement.setAttribute("src","red.png");
-        dotElement.setAttribute("id",target.slice(-1).concat(columnGrid.childElementCount)+"r");
+        colRow= "i"+colRow;
+        dotElement.setAttribute("alt","r");
+        dotElement.setAttribute("id",colRow);
         columnGrid.appendChild(dotElement);
-        if (checkWinner()){
+        if (checkWinner(colRow)){
             document.getElementById('p4').textContent="Player 1 is the winner";
         }
         currentPlayer="b";
         document.getElementById('curPlay').textContent="Player 1's turn";
     }
-
 }
 
-function checkWinner(){
-    
-    for (let i=0;i<7;i++){
-        //let columnGrid = document.getElementById("d"+i);
-        //console.log(columnGrid);
-        for(let j=0;j<6;j++){
-            
-        }
+function checkWinner(colRow){
+    //console.log(colRow);
+    var count=0
+    var col= colRow.charAt(1);
+    var row= colRow.charAt(2); 
+    var dotColor=document.getElementById("i"+col+row).alt;
+    //console.log("col:",col,"row:",row);
+    i=parseInt(col);
+    //Vertical Check
+    for(let j=0;j<6;j++){
+        if (document.getElementById("i"+col+j)){
+           var color=document.getElementById("i"+col+j).alt; 
+           //console.log(color,dotColor);
+           if (color==dotColor){
+               count=count+1;
+           }   
+           else{
+               count=0     
+           }
+        }  
+        console.log(color);
     }
-    
+    if (count==4){
+       console.log("winner");
+       return true;
+    }
+    //Horizontal Check
+    for(let i=0;i<7;i++){
+        if (document.getElementById("i"+i+row)){
+           var color=document.getElementById("i"+i+row).alt; 
+           //console.log(color,dotColor);
+           if (color==dotColor){
+               count=count+1;
+           }   
+           else{
+               count=0     
+           }
+        }  
+        console.log(color);
+    }
+    if (count==4){
+       console.log("winner");
+       return true;
+    }
 
+    //Diagonal Check
+    
     return false;
 }
   
