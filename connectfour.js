@@ -10,7 +10,6 @@ var dots=[
           [0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0]
         ]
 document.getElementById('curPlay').textContent="Player 1's turn";
@@ -30,32 +29,40 @@ function dropBall(){
     target =""+ this.id;
     let columnGrid = document.getElementById(target);
     var x = columnGrid.childElementCount;
-    if (x<6){
-       filledCells+=1; 
+    if (filledCells<42){
+      if (x==6)
+        document.getElementById('p4').textContent="This column is full.";
+      else  
        createBall(columnGrid);
     }
     else {
-       console.log(filledCells);
-       if (filledCells==42)
             document.getElementById('p4').textContent="Game is draw";
-       else     
-            document.getElementById('p4').textContent="This column is full.";
+            mainGrid.setAttribute("class","disableDiv");
+            var startGameBtn= document.getElementById("startGame");
+            startGameBtn.setAttribute("class","yesDisplay");
+            document.getElementById('curPlay').textContent="Play Again? ";
     }
 }
 
 function createBall(columnGrid){
     var dotElement=document.createElement("img");
     dotElement.setAttribute("class","imgClass");
-    var i=parseInt(target.slice(-1));
-    var j=columnGrid.childElementCount;
-    var colRow=target.slice(-1).concat(columnGrid.childElementCount);
+    var i=-1;
+    if (columnGrid.childElementCount<6)
+       var i= 5 - columnGrid.childElementCount;
+    var j=parseInt(target.slice(-1));
+    console.log(i,j); 
+    if (i>-1) {
+        filledCells+=1; 
     if (currentPlayer=="b"){
+        
         dotElement.setAttribute("src","black.png");
         dots[i][j]=1;
-        colRow= "b"+colRow;
-        dotElement.setAttribute("id",colRow);
         columnGrid.appendChild(dotElement);
-        if (checkWinner(colRow)){
+        if (checkWinner(dots)){
+            mainGrid.setAttribute("class","disableDiv");
+            var startGameBtn= document.getElementById("startGame");
+            startGameBtn.setAttribute("class","yesDisplay");
             document.getElementById('p4').textContent="Player 1 is the winner";
             document.getElementById('curPlay').textContent="Play Again? ";
         }else{
@@ -64,11 +71,12 @@ function createBall(columnGrid){
         }
     }else {
         dotElement.setAttribute("src","red.png");
-        colRow= "r"+colRow;
         dots[i][j]=2;
-        dotElement.setAttribute("id",colRow);
         columnGrid.appendChild(dotElement);
-        if (checkWinner(colRow)){
+        if (checkWinner(dots)){
+            mainGrid.setAttribute("class","disableDiv");
+            var startGameBtn= document.getElementById("startGame");
+            startGameBtn.setAttribute("class","yesDisplay");
             document.getElementById('p4').textContent="Player 2 is the winner";
             document.getElementById('curPlay').textContent="Play Again? ";
         }
@@ -77,35 +85,42 @@ function createBall(columnGrid){
             document.getElementById('curPlay').textContent="Player 1's turn";
         }
     }
+    }
 }
 
-function checkWinner(colRow){
-    var col= colRow.charAt(1);
-    var row= colRow.charAt(2); 
-    var win=4,  r=0, c=0, dr=0, dl=0;
-    var color=0; 
-    colRow.charAt(0)==='b' ? color=1:color=2;
-    for(var i=0;i<7;i++){
-        for(var j=0;j<7;j++){
-            (dots[j][i]===color) ? c++ : c=0;
-            (dots[i][j]===color) ? r++ : r=0;
-            if(dots[i][j]===color && i<7-win+1){ dr=0; dl=0;
-                for(var z=0;z<win;z++){ 
-                    (dots[i+z][j+z]===color) ? dr++ : dr=0;
-                    (dots[i+z][j-z]===color) ? dl++ : dl=0;
-                }
-            }
-            if(c===win || r===win || dr===win || dl===win){ 
-                mainGrid.setAttribute("class","disableDiv");
-                var startGameBtn= document.getElementById("startGame");
-                startGameBtn.setAttribute("class","yesDisplay");
+function checkkFourCells(a,b,c,d) {
+    // Check first cell non-zero and all cells match
+    return ((a != 0) && (a ==b) && (a == c) && (a == d));
+}
+
+function checkWinner(grid) {
+    // Check down
+    for (r = 0; r < 3; r++)
+        for (c = 0; c < 7; c++)
+            if (checkkFourCells(grid[r][c], grid[r+1][c], grid[r+2][c], grid[r+3][c]))
                 return true;
-    }
-    } r=0;
-    }
+
+    // Check right
+    for (r = 0; r < 6; r++)
+        for (c = 0; c < 4; c++)
+            if (checkkFourCells(grid[r][c], grid[r][c+1], grid[r][c+2], grid[r][c+3]))
+                return true;
+
+    // Check down-right
+    for (r = 0; r < 3; r++)
+        for (c = 0; c < 4; c++)
+            if (checkkFourCells(grid[r][c], grid[r+1][c+1], grid[r+2][c+2], grid[r+3][c+3]))
+                 return true;
+
+
+    // Check down-left
+    for (r = 3; r < 6; r++)
+        for (c = 0; c < 4; c++)
+            if (checkkFourCells(grid[r][c], grid[r-1][c+1], grid[r-2][c+2], grid[r-3][c+3]))
+                return true;
     return false;
 }
 
-    
+
    
   
